@@ -1,3 +1,4 @@
+#!/local/cluster/bin/python3
 import parsl
 from parsl.app.app import bash_app
 from parsl.config import Config
