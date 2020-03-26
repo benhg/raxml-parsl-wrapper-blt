@@ -22,7 +22,7 @@ config = Config(
 )
 
 # Enable parsl logging if you want, but it prints out a lot of (useful) info
-parsl.set_stream_logger()
+# parsl.set_stream_logger()
 parsl.load(config)
 
 
