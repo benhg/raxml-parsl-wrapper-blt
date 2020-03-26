@@ -37,8 +37,8 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--mode", help="Mode for RaxML to use", type=str, required=True)
     parser.add_argument("--name", help="Run name for RaxML to store", type=str, required=True)
-    parser.add_argument("--in", help="Input file in PHYLIP format.", type=str, required=True)
+    parser.add_argument("--input", help="Input file in PHYLIP format.", type=str, required=True)
     parser.add_argument("--cores", help="Number of cores to use. Max of 48. Optional.", type=int)
     args = parser.parse_args()
     cores = 48 if not args.cores else args.cores
-    fu = run_raxml(args.mode, args.name, args.in, cores)
+    fu = run_raxml(args.mode, args.name, args.input, cores)
