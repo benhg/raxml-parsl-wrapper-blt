@@ -40,4 +40,5 @@ if __name__ == "__main__":
     parser.add_argument("--in", help="Input file in PHYLIP format.", type=str, required=True)
     parser.add_argument("--cores", help="Number of cores to use. Max of 48. Optional.", type=int)
     args = parser.parse_args()
-    print(args)
+    cores = 48 if not args.cores else args.cores
+    fu = run_raxml(args.mode, args.name, args.in, cores)
