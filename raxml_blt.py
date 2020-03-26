@@ -41,4 +41,4 @@ if __name__ == "__main__":
     parser.add_argument("--cores", help="Number of cores to use. Max of 48. Optional.", type=int)
     args = parser.parse_args()
     cores = 48 if not args.cores else args.cores
-    fu = run_raxml(args.mode, args.name, args.input, cores).result()
+    fu = run_raxml(args.mode, args.name, args.input, cores=cores).result()
