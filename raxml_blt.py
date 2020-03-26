@@ -27,7 +27,7 @@ parsl.load(config)
 
 
 @bash_app
-def run_raxml(mode, name, input_phylip, number=1000, cores=48):
+def run_raxml(mode, name, input_phylip, number=100, cores=48):
     import random
     random_seed = random.getrandbits(64)
     return f"/local/cluster/bin/raxmlHPC -m {mode} -n {name} -s {input_phylip} -p {random_seed} -# {number} -T {cores}"
@@ -40,6 +40,8 @@ if __name__ == "__main__":
     parser.add_argument("--name", help="Run name for RaxML to store", type=str, required=True)
     parser.add_argument("--input", help="Input file in PHYLIP format.", type=str, required=True)
     parser.add_argument("--cores", help="Number of cores to use. Max of 48. Optional.", type=int)
+    parser.add_argument("--bootstrap", help="Number of iterations for bootstrapping. Optional.", type=int)
     args = parser.parse_args()
     cores = 48 if not args.cores else args.cores
+    bootstrap = 100 if not args.bootstrap else args.bootstrap
     fu = run_raxml(args.mode, args.name, args.input, cores=cores).result()
