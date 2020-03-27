@@ -11,10 +11,13 @@ from parsl.addresses import address_by_route
 
 
 @bash_app
-def run_raxml(mode, name, input_phylip, number=100, cores=48):
+def run_raxml(mode, name, input_phylip, number=100, bootstrap=False, cores=48):
     import random
     random_seed = random.getrandbits(64)
-    return f"/local/cluster/bin/raxmlHPC -m {mode} -n {name} -s {input_phylip} -p {random_seed} -# {number} -T {cores}"
+    cmd_str = f"/local/cluster/bin/raxmlHPC -m {mode} -n {name} -s {input_phylip} -p {random_seed} -# {number} -T {cores}"
+    if bootstrap:
+        cmd_str += "-f a"
+    return cmd_str
 
 
 if __name__ == "__main__":
@@ -24,10 +27,11 @@ if __name__ == "__main__":
     parser.add_argument("--name", help="Run name for RaxML to store", type=str, required=True)
     parser.add_argument("--input", help="Input file in PHYLIP format.", type=str, required=True)
     parser.add_argument("--cores", help="Number of cores to use. Max of 48. Optional.", type=int)
-    parser.add_argument("--bootstrap", help="Number of iterations for bootstrapping. Optional.", type=int)
+    parser.add_argument("--bootstrap",  help="Tell the computer to bootstrap. No argument. Optional. Set if bootstrapping.", action="store_true")
+    parser.add_argument("--iterations", help="Number of iterations for bootstrapping. Optional. Set if bootstrapping.", type=int)
     args = parser.parse_args()
     cores = 48 if not args.cores else args.cores
-    bootstrap = 100 if not args.bootstrap else args.bootstrap
+    iterations = 100 if not args.iterations else args.iterations
     
     
     config = Config(
@@ -48,4 +52,4 @@ if __name__ == "__main__":
     # parsl.set_stream_logger()
     parsl.load(config)
     
-    fu = run_raxml(args.mode, args.name, args.input, cores=cores).result()
+    fu = run_raxml(args.mode, args.name, args.input, cores=cores, number=iterations, bootstrap=args.bootstrap).result()
